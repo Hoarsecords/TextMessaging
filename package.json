@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon dist/index.js",
     "watch": "tsc -w",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "gen-env": "npx gen-env-types .env -o src/types/env.d.ts -e ."
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,11 @@
   },
   "dependencies": {
     "dotenv": "^16.0.1",
-    "express": "^4.18.1"
+    "dotenv-safe": "^8.2.0",
+    "express": "^4.18.1",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.21.3"
   }
 }
