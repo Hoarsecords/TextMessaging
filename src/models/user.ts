@@ -3,10 +3,11 @@
 import { Model, UUIDV4 } from 'sequelize';
 
 interface UserAttributes {
-  id: string;
+  id: number;
   name: string;
+  username: string;
   email: string;
-  password: string;
+  phone: string;
 }
 
 module.exports = (sequelize: any, DataTypes: any) => {
@@ -16,10 +17,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    id!: string;
+    id!: number;
     name!: string;
+    username!: string;
     email!: string;
-    password!: string;
+    phone!: string;
     static associate(_models: any) {
       // define association here
     }
@@ -36,14 +38,19 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
-      password: {
+      phone: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
       },
     },
     {

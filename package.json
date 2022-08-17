@@ -4,7 +4,7 @@
   "description": "1. [Node.js](https://nodejs.org/en/)\r 2. [TypeScript](https://www.typescriptlang.org/)\r 3. [Jest](https://jestjs.io/)\r 4. [JWT](https://jwt.io/)\r 5. [WebRTC](https://webrtc.org/)\r 6. [JSONPlaceholder](https://jsonplaceholder.typicode.com/)\r 7. [Sequelize TypeScript](https://www.npmjs.com/package/sequelize-typescript)\r 8. [PostgreSQL](https://www.postgresql.org/)\r 9. (Optional) [CircleCI](https://circleci.com/)",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon dist/index.js",
+    "dev": "tsnd --respawn src/index.ts",
     "watch": "tsc -w",
     "start": "ts-node src/index.ts",
     "gen-env": "npx gen-env-types .env -o src/types/env.d.ts -e ."
@@ -25,7 +25,9 @@
     "@types/express": "^4.17.13",
     "@types/node": "^18.7.3",
     "nodemon": "^2.0.19",
+    "sequelize-cli": "^6.4.1",
     "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^4.7.4"
   },
   "dependencies": {
