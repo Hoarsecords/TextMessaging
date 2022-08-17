@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, Unique } from 'sequelize-typescript';
 
 export interface UserAttributes {
   username: string;
@@ -12,12 +12,14 @@ class User extends Model<UserAttributes> implements UserAttributes {
   @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
+  @Unique
   @Column(DataType.STRING)
   username: string;
 
   @Column(DataType.STRING)
   name: string;
 
+  @Unique
   @Column(DataType.STRING)
   email: string;
 

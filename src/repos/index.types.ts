@@ -7,5 +7,5 @@ export type RepoResult<M> = Promise<
 
 export interface IRepo<M> {
   save(model: M): RepoResult<M>;
-  findById(id: string): RepoResult<M>;
+  findById(id: number | string): RepoResult<M>;
 }

@@ -5,12 +5,6 @@ export class Result<V, E> {
   private value: V;
 
   private constructor(isSuccess: boolean, value: V, error: E) {
-    if (isSuccess && error) {
-      throw new Error('Successful result must not contain an error');
-    } else if (!isSuccess && value) {
-      throw new Error('Unsuccessful error must not contain a value');
-    }
-
     this.isSuccess = isSuccess;
     this.isFailure = !isSuccess;
     this.value = value;
@@ -25,19 +19,15 @@ export class Result<V, E> {
     return new Result(false, undefined, error);
   }
 
-  public getError(): E {
-    if (this.isSuccess) {
-      throw new Error('Successful result does not contain an error');
-    }
-
-    return this.error;
+  public getError(): E | null {
+    return this.error || null;
   }
 
-  public getValue(): V {
-    if (this.isFailure) {
-      throw new Error('Unsuccessful result does not contain a value');
-    }
+  public getValue(): V | null {
+    return this.value || null;
+  }
 
-    return this.value;
+  public getResult(): { data: V | null; error: E | null } {
+    return { data: this.value, error: this.error };
   }
 }

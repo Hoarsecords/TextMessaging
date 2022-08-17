@@ -8,7 +8,7 @@ const connection = new Sequelize({
   database: process.env.DB_NAME,
   host: process.env.DB_HOST,
   dialect: 'postgres',
-  sync: { force: true },
+  sync: { alter: true },
   models: [__dirname + '/../models'],
 });
 

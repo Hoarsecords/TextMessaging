@@ -10,7 +10,10 @@ class ChatRoomUser extends Model {
 
   @ForeignKey(() => ChatRoom)
   @Column
-  chatRoomId: number;
+  chatroomId: number;
+
+  @Column
+  test: number;
 }
 
 export default ChatRoomUser;
