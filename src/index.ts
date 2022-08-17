@@ -1,6 +1,6 @@
 import express from 'express';
 import 'reflect-metadata';
-import db from './models';
+import connection from './config/connection';
 
 require('dotenv-safe').config();
 
@@ -13,10 +13,10 @@ const main = async () => {
 
   const port = process.env.PORT || 4000;
 
-  db.sequelize.sync().then(() => {
-    app.listen(port, () => {
-      console.log(`App listening on port ${port}`);
-    });
+  await connection.sync();
+
+  app.listen(port, () => {
+    console.log(`App listening on port ${port}`);
   });
 };
 
