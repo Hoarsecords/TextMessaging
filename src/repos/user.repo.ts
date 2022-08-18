@@ -1,16 +1,20 @@
+import axios from 'axios';
+import { Op } from 'sequelize';
+import ChatRoom from '../models/chatroom';
+import User from '../models/user';
+import { RepoError } from './../types/RepoError';
+import { Result } from './../types/RepoResult';
+import { IObserver } from './../types/Subject.type';
 import {
   DEFAULT_N_VALUE,
   JSONPLACEHOLDER_API_URL,
   MAXIMUM_NUMBER_OF_TRIES,
 } from './../utils/constants';
-import { RepoError } from './../types/RepoError';
-import { Result } from './../types/RepoResult';
-import User from '../models/user';
 import { IRepo, RepoResult } from './index.types';
-import axios from 'axios';
-import { Op } from 'sequelize';
 
-class UserRepo implements IRepo<User> {
+type IUser = IRepo<User> & IObserver<ChatRoom, User, any>;
+
+class UserRepo implements IUser {
   async save(user: User): RepoResult<User> {
     const foundUser = await User.findOne({
       where: {
@@ -87,6 +91,12 @@ class UserRepo implements IRepo<User> {
       message: 'Failed to fetch a random user',
       name: 'user',
     });
+  }
+  async update(subject: ChatRoom, observer: User, data: any): Promise<void> {
+    //this will be used to send new data to the user
+    console.log('updating user', data);
+    //2. send new data to the user
+    //3. update the user in the database
   }
 }
 
