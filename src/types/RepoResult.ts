@@ -28,6 +28,6 @@ export class Result<V, E> {
   }
 
   public getResult(): { data: V | null; error: E | null } {
-    return { data: this.value, error: this.error };
+    return { data: this.value || null, error: this.error || null };
   }
 }
