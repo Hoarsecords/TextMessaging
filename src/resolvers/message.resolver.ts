@@ -6,12 +6,18 @@ import MessageRepo from '../repos/message.repo';
 import { RepoError } from '../types/RepoError';
 import { Result } from '../types/RepoResult';
 
+const messageRepo = new MessageRepo();
+
 const sendMessage = async (req: Request, res: Response) => {
-  const { text, chatroomId } = req.body;
+  let { text, chatroomId } = req.body;
+
+  if (!text) {
+    //fetch random text from JSONPlaceholder
+    text = await messageRepo.getRandomMessage();
+  }
   if (!text || !chatroomId) {
     return res.status(401).json({ error: 'text or chatroomId not found' });
   }
-  const messageRepo = new MessageRepo();
   const user = await AuthRepo.getLoggedInUser(req);
 
   if (!user) return res.status(404).json({ error: 'User not found' });

@@ -30,7 +30,7 @@ export default class MessageRepo implements IMessage {
     const { data } = await axios.get(
       `${JSONPLACEHOLDER_API_URL}/posts/${randomMessageId}`
     );
-    return data.body;
+    return (data?.body || 'Random Message') as string;
   }
   async sendMessage(
     sender: User,
