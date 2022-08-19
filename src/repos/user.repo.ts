@@ -45,7 +45,7 @@ class UserRepo implements IUser {
         });
   }
 
-  async getRandomUser(userId: number) {
+  private async getRandomUser(userId: number) {
     try {
       const { data } = await axios.get(
         `${JSONPLACEHOLDER_API_URL}/users/${userId}`
@@ -70,18 +70,21 @@ class UserRepo implements IUser {
         continue;
       }
 
-      //check if the user is already in the database
-      const newUser = new User({
-        username: randomUser.username,
-        email: randomUser.email,
-        name: randomUser.name,
-        phone: randomUser.phone,
+      //check if the user is already in the database, if not create one and send it back
+      const [user, _created] = await User.findOrCreate({
+        where: {
+          [Op.or]: { email: randomUser.email, username: randomUser.username },
+        },
+        defaults: {
+          username: randomUser.username,
+          email: randomUser.email,
+          name: randomUser.name,
+          phone: randomUser.phone,
+        },
       });
 
-      const { isSuccess } = await this.save(newUser);
-
-      if (isSuccess) {
-        return Result.ok<User>(newUser);
+      if (user) {
+        return Result.ok<User>(user);
       }
       //user is already in the database so we need to fetch another one
       tries++;

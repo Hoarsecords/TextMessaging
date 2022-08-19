@@ -25,14 +25,9 @@ const main = async () => {
   app.post(
     '/create-user',
     async (_req: Request, res: Response): Promise<Response> => {
-      const user: User = new User({
-        username: '3b2a222ii',
-        email: 'aghon12em22011123@gmail.com',
-        name: 'ahmed',
-        phone: '0123456789',
-      });
-      const response = await userRepo.save(user);
-      return res.status(201).json(response);
+      const user = await userRepo.fetchRandomUser();
+
+      return res.status(201).json(user);
     }
   );
   /*   app.post('/create-chatroom', async (_req: Request, res: Response) => {

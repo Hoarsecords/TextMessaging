@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import { JWT_TOKEN_SECRET } from '../utils/constants';
@@ -69,5 +69,15 @@ export default class AuthRepo {
     await this.saveCookie(token, res);
 
     return token;
+  }
+  static async getLoggedInUser(req: Request): Promise<User | null> {
+    if (!req.cookies?.token) {
+      return null;
+    }
+    const payload = await this.getPayload(req.cookies.token);
+    const { data } = payload.getResult();
+    if (!data) return null;
+    const user = await User.findByPk(data.id);
+    return user ? user : null;
   }
 }

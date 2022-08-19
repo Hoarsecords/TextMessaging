@@ -1,12 +1,14 @@
-import { RepoError } from '../../types/RepoError';
 import { Request, Response } from 'express';
-import ChatRoomRepo from '../../repos/chatroom.repo';
-import ChatRoom from '../../models/chatroom';
-import User from '../../models/user';
-import AuthRepo from '../../repos/auth.repo';
-import { Result } from '../../types/RepoResult';
+import ChatRoom from '../models/chatroom';
+import User from '../models/user';
+import AuthRepo from '../repos/auth.repo';
+import ChatRoomRepo from '../repos/chatroom.repo';
+import UserRepo from '../repos/user.repo';
+import { RepoError } from '../types/RepoError';
+import { Result } from '../types/RepoResult';
 
 const chatRoomRepo = new ChatRoomRepo();
+const userRepo = new UserRepo();
 
 const connectToChatRoom = async (req: Request, res: Response) => {
   const { chatroomId } = req.params;
@@ -15,21 +17,43 @@ const connectToChatRoom = async (req: Request, res: Response) => {
   const authPayload = await AuthRepo.getPayload(req?.cookies?.token);
   const userInfo = authPayload.getValue();
 
-  if (!userInfo)
-    return res.status(400).json({ error: 'User not authenticated' });
+  let user: User | null;
+  if (!userInfo) {
+    //1.fetch a random user from JSONPlaceholder and continue
+    const response = await userRepo.fetchRandomUser();
+    const { data, error } = response.getResult();
 
-  const user = await User.findByPk(userInfo.id);
+    if (!data) {
+      return res.status(error?.code || 500).json(error);
+    }
+    //2. send jwt cookie back to the user to be able to identify him in the future
+    await AuthRepo.login(data, res);
+    user = data;
+  } else {
+    user = await User.findByPk(userInfo.id);
+  }
 
-  if (!user)
+  if (!user) {
     return res.status(404).json(
       Result.fail<RepoError>({
         code: 404,
-        message: 'user not found',
+        message:
+          'user not found and cannot be generated, please try again later',
         name: 'user',
       })
     );
+  }
 
-  const chatroom = await ChatRoom.findByPk(Number(chatroomId));
+  //find or create a chatroom
+  const [chatroom] = await ChatRoom.findOrCreate({
+    where: {
+      id: Number(chatroomId),
+    },
+    defaults: {
+      creatorId: user.id,
+      creator: user,
+    },
+  });
 
   if (!chatroom)
     return res.status(404).json(
