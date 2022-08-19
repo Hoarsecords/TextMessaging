@@ -14,11 +14,8 @@ const connectToChatRoom = async (req: Request, res: Response) => {
   const { chatroomId } = req.params;
 
   //user should be get from token
-  const authPayload = await AuthRepo.getPayload(req?.cookies?.token);
-  const userInfo = authPayload.getValue();
-
-  let user: User | null;
-  if (!userInfo) {
+  let user: User | null = await AuthRepo.getLoggedInUser(req);
+  if (!user) {
     //1.fetch a random user from JSONPlaceholder and continue
     const response = await userRepo.fetchRandomUser();
     const { data, error } = response.getResult();
@@ -29,19 +26,6 @@ const connectToChatRoom = async (req: Request, res: Response) => {
     //2. send jwt cookie back to the user to be able to identify him in the future
     await AuthRepo.login(data, res);
     user = data;
-  } else {
-    user = await User.findByPk(userInfo.id);
-  }
-
-  if (!user) {
-    return res.status(404).json(
-      Result.fail<RepoError>({
-        code: 404,
-        message:
-          'user not found and cannot be generated, please try again later',
-        name: 'user',
-      })
-    );
   }
 
   //find or create a chatroom
@@ -55,7 +39,7 @@ const connectToChatRoom = async (req: Request, res: Response) => {
     },
   });
 
-  if (!chatroom)
+  if (!chatroom) {
     return res.status(404).json(
       Result.fail<RepoError>({
         code: 404,
@@ -63,7 +47,7 @@ const connectToChatRoom = async (req: Request, res: Response) => {
         name: 'chatroom',
       })
     );
-
+  }
   const chatRoomConnection = await chatRoomRepo.registerObserver(
     user,
     chatroom
