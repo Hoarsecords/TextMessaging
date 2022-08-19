@@ -94,7 +94,7 @@ class UserRepo implements IUser {
   }
   async update(subject: ChatRoom, observer: User, data: any): Promise<void> {
     //this will be used to send new data to the user
-    console.log('updating user', data);
+    console.log('🚀 updating user', observer.id);
     //2. send new data to the user
     //3. update the user in the database
   }

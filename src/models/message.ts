@@ -11,7 +11,7 @@ import User from './user';
 
 @Table
 class Message extends Model {
-  @Column({ primaryKey: true })
+  @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
   @Column(DataType.STRING)

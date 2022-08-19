@@ -26,8 +26,8 @@ const main = async () => {
     '/create-user',
     async (_req: Request, res: Response): Promise<Response> => {
       const user: User = new User({
-        username: '3ba22ii',
-        email: 'aghonem2011123@gmail.com',
+        username: '3b2a222ii',
+        email: 'aghon12em22011123@gmail.com',
         name: 'ahmed',
         phone: '0123456789',
       });
