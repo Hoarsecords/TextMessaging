@@ -108,6 +108,7 @@ export default class ChatRoomRepo implements IChatRoomRepo {
   }
   async notifyObservers(subject: ChatRoom, message: any): Promise<void> {
     const connections = await this.getSubscribers(subject.id);
+
     //todo: send message to all users
     const userRepo = new UserRepo();
     for (const connection of connections) {

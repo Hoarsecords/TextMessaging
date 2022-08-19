@@ -1,18 +1,11 @@
 import bodyParser from 'body-parser';
-import express, { Request, Response } from 'express';
+import express from 'express';
 import 'reflect-metadata';
 import connection from './config/connection';
-/* import ChatRoom from './models/chatroom'; */
 import cookieParser from 'cookie-parser';
-import User from './models/user';
-import ChatRoomRepo from './repos/chatroom.repo';
-import UserRepo from './repos/user.repo';
 import router from './routes/index.route';
 
 require('dotenv-safe').config();
-
-const userRepo = new UserRepo();
-const chatRoomRepo = new ChatRoomRepo();
 
 const main = async () => {
   const app = express();
@@ -22,38 +15,12 @@ const main = async () => {
 
   app.use(router);
 
-  app.post(
-    '/create-user',
-    async (_req: Request, res: Response): Promise<Response> => {
-      const user = await userRepo.fetchRandomUser();
-
-      return res.status(201).json(user);
-    }
-  );
-  /*   app.post('/create-chatroom', async (_req: Request, res: Response) => {
-    const data = await userRepo.findById(1);
-
-    const { data: user, error } = data.getResult();
-    if (error || !user) {
-      return res.status(500).json(error);
-    }
-
-    const chatRoom = await ChatRoom.create({
-      creator: user,
-      creatorId: user.id,
-    });
-
-    const chatRoomConnection = await chatRoomRepo.connect(chatRoom.id, user);
-
-    return res.status(201).json(chatRoomConnection);
-  }); */
-
   const port = process.env.PORT || 4000;
 
   await connection.sync();
 
   app.listen(port, () => {
-    console.log(`🚀 App listening on port ${port}`);
+    console.log(`🚀 server is running on http://localhost:${port}/`);
   });
 };
 
