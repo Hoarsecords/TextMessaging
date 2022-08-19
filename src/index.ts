@@ -1,13 +1,15 @@
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import 'reflect-metadata';
-import connection from './config/connection';
-import cookieParser from 'cookie-parser';
 import router from './routes/index.route';
+import getDBConnection from './utils/getDBConnection';
 
 require('dotenv-safe').config();
 
 const main = async () => {
+  const connection = getDBConnection();
+
   const app = express();
 
   app.use(bodyParser.json());
