@@ -1,8 +1,5 @@
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import express from 'express';
 import 'reflect-metadata';
-import router from './routes/index.route';
+import buildServer from './utils/buildServer';
 import getDBConnection from './utils/getDBConnection';
 
 require('dotenv-safe').config();
@@ -10,17 +7,11 @@ require('dotenv-safe').config();
 const main = async () => {
   const connection = getDBConnection();
 
-  const app = express();
-
-  app.use(bodyParser.json());
-  app.use(cookieParser());
-
-  app.use(router);
-
-  const port = process.env.PORT || 4000;
+  const app = buildServer();
 
   await connection.sync();
 
+  const port = process.env.PORT || 4000;
   app.listen(port, () => {
     console.log(`🚀 server is running on http://localhost:${port}/`);
   });

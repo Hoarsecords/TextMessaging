@@ -6,6 +6,9 @@ import { BooleanResponse, RepoError } from './../types/RepoError';
 import { Result } from './../types/RepoResult';
 import { IRepo, RepoResult } from './index.types';
 import UserRepo from './user.repo';
+import wrtc from 'wrtc';
+import Peer from 'simple-peer';
+import MyPeer from '../types/MyPeer';
 
 type IChatRoomRepo = IRepo<ChatRoom> & ISubject<ChatRoom, User>;
 
@@ -68,6 +71,10 @@ export default class ChatRoomRepo implements IChatRoomRepo {
       chatroomId: chatroom.id,
       userId: user.id,
     });
+
+    //create a peer to send data with
+    const peer = new Peer({ initiator: true, wrtc: wrtc as any });
+    const newPeer = new MyPeer();
 
     return newChatRoomUser
       ? { success: true, value: chatroom }

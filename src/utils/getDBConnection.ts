@@ -1,19 +1,14 @@
 import { Sequelize } from 'sequelize-typescript';
+import DBConfigs from '../config/dbConfigs';
+import { isTest } from './isTest';
 
 require('dotenv-safe').config();
 
 let connection: Sequelize | null = null;
 const getDBConnection = () => {
+  const dbConfig = isTest() ? DBConfigs.test : DBConfigs.development;
   if (!connection) {
-    connection = new Sequelize({
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      host: process.env.DB_HOST,
-      dialect: 'postgres',
-      sync: { alter: true },
-      models: [__dirname + '/../models'],
-    });
+    connection = new Sequelize(dbConfig);
   }
   return connection;
 };
