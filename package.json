@@ -8,7 +8,7 @@
     "watch": "tsc -w",
     "start": "ts-node src/index.ts",
     "gen-env": "npx gen-env-types .env -o src/types/env.d.ts -e .",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --detectOpenHandles"
   },
   "repository": {
     "type": "git",

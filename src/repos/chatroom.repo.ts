@@ -72,10 +72,6 @@ export default class ChatRoomRepo implements IChatRoomRepo {
       userId: user.id,
     });
 
-    //create a peer to send data with
-    const peer = new Peer({ initiator: true, wrtc: wrtc as any });
-    const newPeer = new MyPeer();
-
     return newChatRoomUser
       ? { success: true, value: chatroom }
       : {
@@ -116,11 +112,10 @@ export default class ChatRoomRepo implements IChatRoomRepo {
   async notifyObservers(subject: ChatRoom, message: any): Promise<void> {
     const connections = await this.getSubscribers(subject.id);
 
-    //todo: send message to all users
     const userRepo = new UserRepo();
     for (const connection of connections) {
       //send message to each user
-      userRepo.update(subject, connection.user, { message });
+      userRepo.update(subject, connection.user, message);
     }
   }
 }

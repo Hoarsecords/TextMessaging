@@ -97,10 +97,12 @@ class UserRepo implements IUser {
   }
   async update(subject: ChatRoom, observer: User, data: any): Promise<void> {
     //this will be used to send new data to the user
-    console.log('🚀 updating user', observer.id);
-    //2. send new data to the user
-    //3. update the user in the database
+    console.log(
+      `This is sent to user : ${observer.id} that connects to chatroom: ${subject.id} with message: ${data}`
+    );
+    //todo: send the data to each webrtc client
   }
 }
 
 export default UserRepo;
+//

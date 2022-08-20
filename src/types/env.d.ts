@@ -7,6 +7,7 @@ declare global {
       DB_PASSWORD: string;
       DB_NAME: string;
       TEST_DB_NAME: string;
+      JWT_TOKEN_SECRET: string;
     }
   }
 }

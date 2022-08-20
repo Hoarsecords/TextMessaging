@@ -7,10 +7,10 @@ import UserRepo from '../repos/user.repo';
 import { RepoError } from '../types/RepoError';
 import { Result } from '../types/RepoResult';
 
-const chatRoomRepo = new ChatRoomRepo();
 const userRepo = new UserRepo();
 
 const connectToChatRoom = async (req: Request, res: Response) => {
+  const chatRoomRepo = new ChatRoomRepo();
   const { chatroomId } = req.params;
 
   //user should be get from token
@@ -57,20 +57,23 @@ const connectToChatRoom = async (req: Request, res: Response) => {
 };
 
 const disconnectFromChatRoom = async (req: Request, res: Response) => {
+  const chatRoomRepo = new ChatRoomRepo();
+
   const { chatroomId } = req.params;
 
   //user should be get from token
   const authPayload = await AuthRepo.getPayload(req?.cookies?.token);
   const userInfo = authPayload.getValue();
 
-  if (!userInfo)
-    return res.status(400).json(
+  if (!userInfo) {
+    return res.status(401).json(
       Result.fail<RepoError>({
         code: 401,
         message: 'User not authenticated',
         name: 'user',
       })
     );
+  }
 
   const user = await User.findByPk(userInfo.id);
 

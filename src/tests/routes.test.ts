@@ -6,13 +6,14 @@ const app = buildServer();
 const db = getDBConnection();
 
 beforeAll(async () => {
-  // console.log(`🚀 ~ file: routes.test.ts ~ line 9 ~ beforeAll ~ db`, db);
   await db.sync();
 });
 
-afterAll(async () => {});
+afterAll(async () => {
+  await db.drop();
+});
 
-describe('Post Endpoints', () => {
+describe('Testing Endpoints', () => {
   it('should return not authenticated error', async () => {
     const res = await request(app).get('/me');
 
@@ -36,21 +37,13 @@ describe('Post Endpoints', () => {
     expect(res.body.value).toHaveProperty('id');
   });
 
-  it('should return an authenticated user', async () => {
-    const res = await request(app).get('/me');
-    console.log(`🚀 ~ file: routes.test.ts ~ line 43 ~ it ~ res`, res.body);
+  it('should return an error that user is not authenticated', async () => {
+    const res = await request(app).post('/disconnect/6');
 
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toHaveProperty('isSuccess');
-    expect(res.body?.isSuccess).toBe(true);
-  });
-
-  it('should return an error that the user is already connected to this chatroom', async () => {
-    const res = await request(app).post('/connect/5');
-    // console.log(`🚀 ~ file: routes.test.ts ~ line 34 ~ it ~ res`, res.body);
-
-    expect(res.statusCode).toEqual(201);
-    expect(res.body.success).toBe(false);
-    expect(res.body).toHaveProperty('error');
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.isSuccess).toBe(false);
+    expect(res.body.error).toHaveProperty('message');
+    expect(res.body.error).toHaveProperty('name');
+    expect(res.body.error).toHaveProperty('code');
   });
 });

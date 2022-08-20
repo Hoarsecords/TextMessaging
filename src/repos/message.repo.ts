@@ -44,7 +44,7 @@ export default class MessageRepo implements IMessage {
     });
     const chatRoomRepo = new ChatRoomRepo();
     //notify the other user in the chatroom
-    await chatRoomRepo.notifyObservers(chatroom, newMessage);
+    await chatRoomRepo.notifyObservers(chatroom, newMessage.text);
     return Result.ok<Message>(newMessage);
   }
 }

@@ -1,5 +1,4 @@
 import Peer from 'simple-peer';
-import wrtc from 'wrtc';
 
 interface IMyPeer {
   peer: Peer.Instance | null;
@@ -9,8 +8,10 @@ export default class MyPeer implements IMyPeer {
   peer: Peer.Instance | null = null;
   remotePeers: Peer.Instance[] = [];
 
-  constructor() {
-    this.peer = new Peer({ initiator: true, wrtc: wrtc as any });
+  constructor(opts?: Peer.Options) {
+    //1. create a new peer
+    //2. connect the peer to other peers in remotePeers (.on('signal'))
+    this.peer = new Peer(opts);
     this.remotePeers = [];
   }
 
@@ -24,7 +25,10 @@ export default class MyPeer implements IMyPeer {
 
   async removeRemotePeer(remotePeer: Peer.Instance) {
     //delete the peer from the list
-
+    const updatedRemotePeers = this.remotePeers.filter(
+      (rp) => rp !== remotePeer
+    );
+    this.remotePeers = updatedRemotePeers;
     //destroy connection
     remotePeer?.destroy();
   }
@@ -36,3 +40,4 @@ export default class MyPeer implements IMyPeer {
     });
   }
 }
+//

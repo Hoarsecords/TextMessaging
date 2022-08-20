@@ -4,6 +4,7 @@ import AuthRepo from '../repos/auth.repo';
 import User from '../models/user';
 import { Result } from '../types/RepoResult';
 import { Sequelize } from 'sequelize-typescript';
+import UserRepo from '../repos/user.repo';
 
 const login = async (req: Request, res: Response) => {
   const email = req.body?.email;
@@ -53,4 +54,13 @@ const me = async (req: Request, res: Response) => {
   }
   return res.status(200).json(user);
 };
-export { login, randomLogin, me };
+
+const loginWithRandomGeneratedUser = async (_req: Request, res: Response) => {
+  const userRepo = new UserRepo();
+  const result = await userRepo.fetchRandomUser();
+  const { data: user, error } = result.getResult();
+  if (!user) return res.status(error?.code || 500).json(error);
+  await AuthRepo.login(user, res);
+  return res.status(200).json(user);
+};
+export { login, randomLogin, me, loginWithRandomGeneratedUser };

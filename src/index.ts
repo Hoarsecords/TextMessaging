@@ -18,3 +18,9 @@ const main = async () => {
 };
 
 main();
+
+//for each chatroom, create initiator peer,
+/* 
+  const mainPeer = new MyPeer({initiator:true,chatroom})
+
+*/

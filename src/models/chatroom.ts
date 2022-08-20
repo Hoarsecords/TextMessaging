@@ -1,10 +1,10 @@
 import {
-  Table,
-  Column,
-  Model,
-  ForeignKey,
   BelongsTo,
   BelongsToMany,
+  Column,
+  ForeignKey,
+  Model,
+  Table,
 } from 'sequelize-typescript';
 import ChatRoomUser from './connection';
 import User from './user';
